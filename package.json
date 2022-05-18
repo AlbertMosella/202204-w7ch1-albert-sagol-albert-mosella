@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "nodemon. -q"
+    "start-dev": "nodemon. -q",
+    "start": "node .",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "jest": "^28.1.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "husky": "^7.0.0"
   }
 }
