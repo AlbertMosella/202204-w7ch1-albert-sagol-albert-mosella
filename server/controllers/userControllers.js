@@ -12,6 +12,7 @@ const loginUser = async (req, res, next) => {
     error.statusCode = 403;
 
     next(error);
+    return;
   }
 
   const userData = {
