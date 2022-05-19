@@ -2,8 +2,8 @@ const express = require("express");
 
 const { getPlatforms } = require("../controllers/platformsControllers");
 
-const platformsRouter = express.Router();
+const platformRouter = express.Router();
 
-platformsRouter.get("/", getPlatforms);
+platformRouter.get("/", getPlatforms);
 
-module.exports = platformsRouter;
+module.exports = platformRouter;

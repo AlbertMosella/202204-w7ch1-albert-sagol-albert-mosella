@@ -1,21 +1,24 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const chalk = require("chalk");
+const debug = require("debug")("series:users");
 const User = require("../../db/models/User");
 
 const loginUser = async (req, res, next) => {
-  const { username, password } = req.body;
+  debug(chalk.green("Login request received"));
+  const { name, password } = req.body;
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ name });
 
   if (!user) {
     const error = new Error("Wrong user data");
     error.statusCode = 403;
-
+    debug(chalk.red("Wrong user data"));
     next(error);
   }
 
   const userData = {
-    username: user.username,
+    name: user.name,
     id: user.id,
   };
 
@@ -33,4 +36,32 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-module.exports = loginUser;
+const registerUser = async (req, res, next) => {
+  const { name, admin, series, password } = req.body;
+  const user = await User.findOne({ name });
+
+  if (user) {
+    const error = new Error();
+    error.statusCode = 409;
+    error.customMessage = "User already existis";
+
+    next(error);
+  }
+  const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const newUser = await User.create({
+      name,
+      admin,
+      series,
+      password: encryptedPassword,
+    });
+    res.status(201).json({ user: { name: newUser.name, id: newUser.id } });
+  } catch (error) {
+    error.statusCode = 400;
+    error.customMessage = "Wrong user data";
+
+    next(error);
+  }
+};
+
+module.exports = { loginUser, registerUser };

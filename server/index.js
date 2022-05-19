@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const { notFoundError, errorDefault } = require("./middlewares/errors");
 const platformsRouter = require("./routers/platformRouters");
+const userRouter = require("./routers/userRouter");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/platforms", platformsRouter);
+app.use("/users", userRouter);
 
 app.use(notFoundError);
 app.use(errorDefault);
