@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "nodemon. -q",
+    "start-dev": "nodemon . -q",
     "start": "node .",
     "prepare": "husky install"
   },
