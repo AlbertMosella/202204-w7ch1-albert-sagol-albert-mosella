@@ -29,27 +29,27 @@ describe("Given a notFoundError function", () => {
 });
 
 describe("Given a errorDefault function", () => {
-  describe("When it's called with a response", () => {
+  describe("When it's called with a error and response", () => {
+    const error = {
+      errorMessage: undefined,
+      statusCode: undefined,
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
     test("Then it should call the response status method with a 500", () => {
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: () => {},
-      };
       const expectedStatus = 500;
 
-      errorDefault(null, null, res);
+      errorDefault(error, null, res);
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
     });
 
     test("Then it should call the response json method with the message 'Error 500'", () => {
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const expectedText = { msg: "Error 500" };
+      const expectedText = { msg: "General error" };
 
-      errorDefault(null, null, res);
+      errorDefault(error, null, res);
 
       expect(res.json).toHaveBeenCalledWith(expectedText);
     });
