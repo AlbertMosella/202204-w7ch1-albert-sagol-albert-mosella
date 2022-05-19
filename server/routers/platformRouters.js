@@ -4,10 +4,11 @@ const {
   getPlatforms,
   createPlatform,
 } = require("../controllers/platformsControllers");
+const { adminUser } = require("../middlewares/adminUser");
 
 const platformRouter = express.Router();
 
 platformRouter.get("/", getPlatforms);
-platformRouter.post("/create", createPlatform);
+platformRouter.post("/create", adminUser, createPlatform);
 
 module.exports = platformRouter;
