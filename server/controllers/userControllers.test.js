@@ -2,23 +2,25 @@ const loginUser = require("./userControllers");
 
 jest.mock("../../db/models/User", () => ({
   ...jest.requireActual("../../db/models/User"),
-  findOne: (username) => username,
+  findOne: ({ username }) => username === "correctName",
 }));
 
 jest.mock("bcrypt", () => ({
   ...jest.requireActual("bcrypt"),
-  compare: jest.fn().mockReturnValue("testComparedPassword"),
+  compare: (password) => password === "correctPassword",
 }));
 
 jest.mock("jsonwebtoken", () => ({
   ...jest.requireActual("jsonwebtoken"),
-  sign: jest.fn().mockReturnValue("testToken"),
+  sign: () => "testToken",
 }));
 
 describe("Given the loginUser function", () => {
   describe("When it's called and receives a request with 'name' and 'password'", () => {
     test("Then it should call the response with status 200 and json with 'testToken'", async () => {
-      const req = { body: { username: "name", password: "password" } };
+      const req = {
+        body: { username: "correctName", password: "correctPassword" },
+      };
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
@@ -30,6 +32,36 @@ describe("Given the loginUser function", () => {
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
       expect(res.json).toHaveBeenCalledWith(expectedToken);
+    });
+  });
+
+  describe("When it's called and recieves a request with 'wrongName'", () => {
+    test("Then it should call the next with error with status 403 and message 'Wrong user data'", async () => {
+      const req = { body: { username: "wrongName" } };
+      const next = jest.fn();
+
+      const error = new Error("Wrong user data");
+      error.statusCode = 403;
+
+      await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe("When it's called and recieves a request with 'correctName' and 'wrongPassword'", () => {
+    test("Then it should call the next with error with status 403 and message 'Wrong user data'", async () => {
+      const req = {
+        body: { username: "correctName", password: "wrongPassword" },
+      };
+      const next = jest.fn();
+
+      const error = new Error("Wrong user data");
+      error.statusCode = 403;
+
+      await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });
