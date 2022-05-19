@@ -9,13 +9,13 @@ Cada serie pertenece a una plataforma.
 
 Endpoints (todos están protegidos por JWT menos los que se indiquen como abiertos):
 
-[ ] [POST] /users/login: endpoint abierto, para iniciar sesión
+[x] [POST] /users/login: endpoint abierto, para iniciar sesión
 
-[ ] [POST] /users/register: endpoint abierto, para crear un usuario
+[x] [POST] /users/register: endpoint abierto, para crear un usuario
 
 [x] [GET] /platforms: lista todas las plataformas de la base de datos
 
-[ ] [POST] /platforms: para crear una nueva plataforma (sólo administrador)
+[x] [POST] /platforms: para crear una nueva plataforma (sólo administrador)
 
 [ ] [PUT] /platforms/:idPlatform : para actualizar una plataforma (sólo administrador)
 

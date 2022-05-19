@@ -5,4 +5,30 @@ const getPlatforms = async (req, res) => {
   res.status(200).json({ platforms });
 };
 
-module.exports = { getPlatforms };
+const createPlatform = async (req, res, next) => {
+  const { name } = req.body;
+  const platform = await Platform.findOne({ name });
+
+  if (platform) {
+    const error = new Error();
+    error.statusCode = 409;
+    error.customMessage = "Platform already existis";
+
+    next(error);
+  }
+  try {
+    const newPlatform = await Platform.create({
+      name,
+    });
+    res
+      .status(201)
+      .json({ user: { name: newPlatform.name, id: newPlatform.id } });
+  } catch (error) {
+    error.statusCode = 400;
+    error.customMessage = "Error platform creation";
+
+    next(error);
+  }
+};
+
+module.exports = { createPlatform, getPlatforms };
