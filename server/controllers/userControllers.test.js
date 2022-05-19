@@ -1,4 +1,4 @@
-const loginUser = require("./userControllers");
+const { loginUser } = require("./userControllers");
 
 jest.mock("../../db/models/User", () => ({
   ...jest.requireActual("../../db/models/User"),
@@ -40,7 +40,7 @@ describe("Given the loginUser function", () => {
       const req = { body: { name: "wrongName" } };
       const next = jest.fn();
 
-      const error = new Error("Wrong user data");
+      const error = new Error("Wrong username or password");
       error.statusCode = 403;
 
       await loginUser(req, null, next);
@@ -56,7 +56,7 @@ describe("Given the loginUser function", () => {
       };
       const next = jest.fn();
 
-      const error = new Error("Wrong user data");
+      const error = new Error("Wrong username or password");
       error.statusCode = 403;
 
       await loginUser(req, null, next);
