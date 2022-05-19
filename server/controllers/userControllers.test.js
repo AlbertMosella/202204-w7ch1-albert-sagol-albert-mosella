@@ -2,7 +2,7 @@ const loginUser = require("./userControllers");
 
 jest.mock("../../db/models/User", () => ({
   ...jest.requireActual("../../db/models/User"),
-  findOne: ({ username }) => username === "correctName",
+  findOne: ({ name }) => name === "correctName",
 }));
 
 jest.mock("bcrypt", () => ({
@@ -16,10 +16,10 @@ jest.mock("jsonwebtoken", () => ({
 }));
 
 describe("Given the loginUser function", () => {
-  describe("When it's called and receives a request with 'name' and 'password'", () => {
+  describe("When it's called and receives a request with 'correctName' and 'correctPassword'", () => {
     test("Then it should call the response with status 200 and json with 'testToken'", async () => {
       const req = {
-        body: { username: "correctName", password: "correctPassword" },
+        body: { name: "correctName", password: "correctPassword" },
       };
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -37,7 +37,7 @@ describe("Given the loginUser function", () => {
 
   describe("When it's called and recieves a request with 'wrongName'", () => {
     test("Then it should call the next with error with status 403 and message 'Wrong user data'", async () => {
-      const req = { body: { username: "wrongName" } };
+      const req = { body: { name: "wrongName" } };
       const next = jest.fn();
 
       const error = new Error("Wrong user data");
@@ -52,7 +52,7 @@ describe("Given the loginUser function", () => {
   describe("When it's called and recieves a request with 'correctName' and 'wrongPassword'", () => {
     test("Then it should call the next with error with status 403 and message 'Wrong user data'", async () => {
       const req = {
-        body: { username: "correctName", password: "wrongPassword" },
+        body: { name: "correctName", password: "wrongPassword" },
       };
       const next = jest.fn();
 
