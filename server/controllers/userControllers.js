@@ -11,7 +11,7 @@ const loginUser = async (req, res, next) => {
   const user = await User.findOne({ name });
 
   if (!user) {
-    const error = new Error("Wrong user data");
+    const error = new Error("Wrong username or password");
     error.statusCode = 403;
     debug(chalk.red("Wrong user data"));
     next(error);
@@ -27,7 +27,7 @@ const loginUser = async (req, res, next) => {
   const correctPassword = await bcrypt.compare(password, user.password);
 
   if (!correctPassword) {
-    const error = new Error("Wrong user data");
+    const error = new Error("Wrong username or password");
     error.statusCode = 403;
 
     next(error);
