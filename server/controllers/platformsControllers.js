@@ -1,3 +1,4 @@
+const jsonwebtoken = require("jsonwebtoken");
 const Platform = require("../../db/models/Platform");
 
 const getPlatforms = async (req, res) => {
@@ -29,6 +30,14 @@ const createPlatform = async (req, res, next) => {
 
     next(error);
   }
+};
+
+const editPlatform = async (req, res, next) => {
+  const token = req.header.Authorization;
+
+  const tokenCoded = token.replace("Bearer ", "");
+
+  const tokenDecoded = jsonwebtoken.decode(tokenCoded, process.env.JWT_SECRET);
 };
 
 module.exports = { createPlatform, getPlatforms };
